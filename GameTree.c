@@ -140,8 +140,8 @@ LPCHOMP_NODE BestChildNode(LPCHOMP_NODE Parent, CHOMP_PLAYER Player)
 	while (CurrentNode)
 	{
 		// Check overflow
-		int BestRating = (BestNode->WinCount)[i] * CurrentNode->TotalCount;
-		int CurrentRating = (CurrentNode->WinCount)[i] * BestNode->TotalCount;
+		double BestRating = (BestNode->WinCount)[i] / ((double)BestNode->TotalCount);
+		double CurrentRating = (CurrentNode->WinCount)[i] / ((double)CurrentNode->TotalCount);
 		if (CurrentRating > BestRating)
 		{
 			BestNode = CurrentNode;
