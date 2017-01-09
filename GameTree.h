@@ -6,7 +6,6 @@ typedef struct _CHOMP_NODE {
 	struct _CHOMP_NODE *FirstChild;
 	struct _CHOMP_NODE *LastChild;
 
-	struct _CHOMP_NODE *Prev;
 	struct _CHOMP_NODE *Next;
 
 	int Depth;

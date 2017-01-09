@@ -21,7 +21,7 @@ LPCHOMP_NODE CreateRootNode()
 	LPCHOMP_NODE Root = malloc(sizeof(CHOMP_NODE));
 	if (Root)
 	{
-		Root->Parent = Root->FirstChild = Root->LastChild = Root->Prev = Root->Next = NULL;
+		Root->Parent = Root->FirstChild = Root->LastChild = Root->Next = NULL;
 		Root->Depth = 0;
 		Root->X = Root->Y = -1;
 		Root->TotalCount = 0;
@@ -83,12 +83,10 @@ LPCHOMP_NODE CreateChildNode(LPCHOMP_NODE Parent, int X, int Y)
 
 		if (!Parent->FirstChild)
 		{
-			Child->Prev = NULL;
 			Parent->FirstChild = Parent->LastChild = Child;
 		}
 		else
 		{
-			Child->Prev = Parent->LastChild;
 			Parent->LastChild->Next = Child;
 			Parent->LastChild = Child;
 		}
