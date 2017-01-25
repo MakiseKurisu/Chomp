@@ -1,6 +1,61 @@
 #include "stdafx.h"
 
-#define MCTS_COEFFICIENT 1024
+#define MCTS_COEFFICIENT 20	//3x3
+
+LPCHOMP_NODE Flat(LPCHOMP_NODE Node, LPCHOMP_BOARD Board)
+{
+	int Index = 1;
+	if (Board->PieceCount > 1)
+		Index = secure_rand(2, Board->PieceCount);
+	MakeMoveIndex(Board, Index);
+	return CreateChildNodeFromIndex(Node, Board, Index);
+}
+
+LPCHOMP_NODE UCB1(LPCHOMP_NODE Node, LPCHOMP_BOARD Board)
+{
+	while (!EndState(Board) && !IsNodeEmpty(Node))
+	{
+		DPRINT("depth %i\n", Node->Depth);
+
+		double * Rating = malloc(sizeof(double) * (Board->PieceCount));
+		for (int i = (Board->PieceCount - 1); i > 0; i--)
+		{
+			Rating[i] = INFINITY;
+		}
+
+		DPRINT("init rating array %i\n", Board->PieceCount);
+
+		LPCHOMP_NODE Child = Node->FirstChild;
+		while (Child)
+		{
+			Rating[(Child->Index - 1)] = ((double)(Child->WinCount[Board->Turn])) / (Child->TotalCount) + sqrt(2 * log(Node->TotalCount) / (Child->TotalCount));
+			DPRINT("child %i rated %f\n", Child->Index, Rating[(Child->Index - 1)]);
+			Child = Child->Next;
+		}
+
+		int Index = (Board->PieceCount - 1);
+		for (int i = (Board->PieceCount - 1); i > 0; i--)
+		{
+			if (isinf(Rating[i]))
+			{
+				DPRINT("child %i has no node\n", i);
+				Index = i;
+				break;
+			}
+			else if (Rating[i] > Rating[Index])
+			{
+				DPRINT("child %i has higher rating than %i\n", i, Index);
+				Index = i;
+			}
+		}
+		DPRINT("select %i\n", Index);
+		free(Rating);
+		Node = CreateChildNodeFromIndex(Node, Board, Index + 1);
+		MakeMoveIndex(Board, Index + 1);
+	}
+	DPRINT("end selection\n\n");
+	return Node;
+}
 
 void StartMCTS(int Length, int Width, int Iteration)
 {
@@ -25,27 +80,14 @@ void StartMCTS(int Length, int Width, int Iteration)
 	{
 		for (int i = 0; i < (CurrentBoard->PieceCount * Iteration); i++)
 		{
-			// Selection
-			int ChildIndex = 1;
-			if (CurrentBoard->PieceCount > 1)
-				ChildIndex = secure_rand(2, CurrentBoard->PieceCount);
-
-			// Expansion
-			LPCHOMP_NODE ChildNode = CreateChildNodeFromIndex(CurrentNode, CurrentBoard, ChildIndex);
-			if (!ChildNode)
-				break;
-
-			// Simulation
 			LPCHOMP_BOARD ChildBoard = CopyBoard(CurrentBoard);
 			if (!ChildBoard)
 				break;
-			// Make move according to node
-			if (!MakeMove(ChildBoard, ChildNode->X, ChildNode->Y))
-			{
-				FreeBoard(ChildBoard);
-				break;
-			}
 
+			// Selection & Expansion
+			LPCHOMP_NODE ChildNode = UCB1(CurrentNode, ChildBoard);
+
+			// Simulation
 			while (!EndState(ChildBoard))
 			{
 				int X, Y;
@@ -53,12 +95,14 @@ void StartMCTS(int Length, int Width, int Iteration)
 				if (ChildBoard->PieceCount > 1)
 					RandomMove = secure_rand(2, ChildBoard->PieceCount);
 
+				//*
 				ChildNode = CreateChildNodeFromIndex(ChildNode, ChildBoard, RandomMove);
 				if (!ChildNode)
 				{
 					FreeBoard(ChildBoard);
 					break;
 				}
+				//*/
 
 				if (!IndexToCoord(ChildBoard, RandomMove, &X, &Y))
 				{
@@ -84,7 +128,7 @@ void StartMCTS(int Length, int Width, int Iteration)
 				do
 				{
 					ChildNode->TotalCount++;
-					ChildNode->WinCount[(int)Player]++;
+					ChildNode->WinCount[Player]++;
 				} while ((ChildNode = ChildNode->Parent) != NULL);
 			}
 
@@ -93,11 +137,11 @@ void StartMCTS(int Length, int Width, int Iteration)
 		}
 
 		// Make decision based on MCTS
-		LPCHOMP_NODE BestNode = BestChildNode(CurrentNode, CurrentBoard->Turn);
+		LPCHOMP_NODE BestNode = BestChildNode(CurrentNode, CurrentBoard);
 
 		// Display message
-		//PrintChild(CurrentNode);
-		//printf("player %i plays at %i,%i\n", 1 + (int)CurrentBoard->Turn, BestNode->X + 1, BestNode->Y + 1);
+		PrintChild(CurrentNode);
+		printf("player %i plays at %i,%i\n", 1 + (int)CurrentBoard->Turn, BestNode->X + 1, BestNode->Y + 1);
 		//PrintChild(BestNode);
 
 		// Update board and root node
