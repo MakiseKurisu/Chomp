@@ -24,5 +24,6 @@ LPCHOMP_NODE CreateRootNode();
 LPCHOMP_NODE SearchChildNode(LPCHOMP_NODE Node, int X, int Y);
 LPCHOMP_NODE CreateChildNode(LPCHOMP_NODE Parent, int X, int Y, int Index);
 LPCHOMP_NODE CreateChildNodeFromIndex(LPCHOMP_NODE Parent, LPCHOMP_BOARD Board, int Index);
+LPCHOMP_NODE CreateChildNodeFromCoord(LPCHOMP_NODE Parent, LPCHOMP_BOARD Board, int X, int Y);
 LPCHOMP_NODE BestChildNode(LPCHOMP_NODE Parent, LPCHOMP_BOARD Board);
 void PrintChild(LPCHOMP_NODE Parent);

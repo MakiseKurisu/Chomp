@@ -113,6 +113,19 @@ LPCHOMP_NODE CreateChildNodeFromIndex(LPCHOMP_NODE Parent, LPCHOMP_BOARD Board, 
 	}
 }
 
+LPCHOMP_NODE CreateChildNodeFromCoord(LPCHOMP_NODE Parent, LPCHOMP_BOARD Board, int X, int Y)
+{
+	int Index;
+	if (CoordToIndex(Board, &Index, X, Y))
+	{
+		return CreateChildNode(Parent, X, Y, Index);
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
 void PrintChild(LPCHOMP_NODE Parent)
 {
 	if (Parent)
