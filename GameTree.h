@@ -18,6 +18,7 @@ typedef struct _CHOMP_NODE {
 	int WinCount[CHOMP_MAX_PLAYER];
 } CHOMP_NODE, *LPCHOMP_NODE;
 
+bool IsNodeEmpty(LPCHOMP_NODE Node);
 void FreeNode(LPCHOMP_NODE Node);
 LPCHOMP_NODE CreateRootNode();
 LPCHOMP_NODE SearchChildNode(LPCHOMP_NODE Node, int X, int Y);

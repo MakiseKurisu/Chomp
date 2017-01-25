@@ -1,5 +1,10 @@
 #include "stdafx.h"
 
+bool IsNodeEmpty(LPCHOMP_NODE Node)
+{
+	return (Node->TotalCount == 0);
+}
+
 void FreeNode(LPCHOMP_NODE Node)
 {
 	if (Node)
