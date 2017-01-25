@@ -78,6 +78,24 @@ void StartMCTS(int Length, int Width, int Iteration)
 
 	while (!EndState(CurrentBoard))
 	{
+		int X = 0, Y = 0;
+		bool Auto = true;
+		printf("make a move or enter 0 for auto move: ");
+		scanf_s("%i,%i", &X, &Y);
+		if (X > 0 && Y > 0)
+		{
+			printf("player %i plays at %i,%i\n", 1 + CurrentBoard->Turn, X, Y);
+			X -= 1;
+			Y -= 1;
+			CurrentNode = CreateChildNodeFromCoord(CurrentNode, CurrentBoard, X, Y);
+			MakeMove(CurrentBoard, X, Y);
+			// Print board
+			PrintBoard(CurrentBoard);
+			printf("\n");
+			continue;
+		}
+
+
 		for (int i = 0; i < (CurrentBoard->PieceCount * Iteration); i++)
 		{
 			LPCHOMP_BOARD ChildBoard = CopyBoard(CurrentBoard);
