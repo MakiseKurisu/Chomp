@@ -119,7 +119,7 @@ bool IndexToCoord(LPCHOMP_BOARD Board, int Index, int* X, int* Y)
 
 bool CoordToIndex(LPCHOMP_BOARD Board, int* Index, int X, int Y)
 {
-	if (!Board || !Index || *Index <= 0 || *Index > Board->PieceCount)
+	if (!Board || !Index || X <= 0 || Y <= 0 || X > Board->Width || Y > Board->Length)
 	{
 		return false;
 	}
