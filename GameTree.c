@@ -23,7 +23,7 @@ LPCHOMP_NODE CreateRootNode()
 	{
 		Root->Parent = Root->FirstChild = Root->LastChild = Root->Next = NULL;
 		Root->Depth = 0;
-		Root->X = Root->Y = -1;
+		Root->X = Root->Y = Root->Index = -1;
 		Root->TotalCount = 0;
 		for (int i = 0; i < CHOMP_MAX_PLAYER; i++)
 		{
@@ -54,7 +54,7 @@ LPCHOMP_NODE SearchChildNode(LPCHOMP_NODE Node, int X, int Y)
 	return NULL;
 }
 
-LPCHOMP_NODE CreateChildNode(LPCHOMP_NODE Parent, int X, int Y)
+LPCHOMP_NODE CreateChildNode(LPCHOMP_NODE Parent, int X, int Y, int Index)
 {
 
 	LPCHOMP_NODE Child = SearchChildNode(Parent, X, Y);
@@ -75,6 +75,7 @@ LPCHOMP_NODE CreateChildNode(LPCHOMP_NODE Parent, int X, int Y)
 		Child->Depth = Parent->Depth + 1;
 		Child->X = X;
 		Child->Y = Y;
+		Child->Index = Index;
 		Child->TotalCount = 0;
 		for (int i = 0; i < CHOMP_MAX_PLAYER; i++)
 		{
@@ -99,7 +100,7 @@ LPCHOMP_NODE CreateChildNodeFromIndex(LPCHOMP_NODE Parent, LPCHOMP_BOARD Board, 
 	int X, Y;
 	if (IndexToCoord(Board, Index, &X, &Y))
 	{
-		return CreateChildNode(Parent, X, Y);
+		return CreateChildNode(Parent, X, Y, Index);
 	}
 	else
 	{
