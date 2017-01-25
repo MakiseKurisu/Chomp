@@ -159,7 +159,7 @@ void StartMCTS(int Length, int Width, int Iteration)
 
 		// Display message
 		PrintChild(CurrentNode);
-		printf("player %i plays at %i,%i\n", 1 + (int)CurrentBoard->Turn, BestNode->X + 1, BestNode->Y + 1);
+		printf("player %i plays at %i,%i\n", 1 + CurrentBoard->Turn, BestNode->X + 1, BestNode->Y + 1);
 		//PrintChild(BestNode);
 
 		// Update board and root node
