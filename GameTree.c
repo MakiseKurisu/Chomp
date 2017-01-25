@@ -126,9 +126,9 @@ void PrintChild(LPCHOMP_NODE Parent)
 	}
 }
 
-LPCHOMP_NODE BestChildNode(LPCHOMP_NODE Parent, CHOMP_PLAYER Player)
+LPCHOMP_NODE BestChildNode(LPCHOMP_NODE Parent, LPCHOMP_BOARD Board)
 {
-	if (!Parent)
+	if (!Parent || !Board)
 	{
 		return NULL;
 	}
@@ -138,17 +138,18 @@ LPCHOMP_NODE BestChildNode(LPCHOMP_NODE Parent, CHOMP_PLAYER Player)
 	{
 		return NULL;
 	}
+	double BestRating = ((double)(BestNode->WinCount[Board->Turn])) / (BestNode->TotalCount) + sqrt(2 * log(Parent->TotalCount) / (BestNode->TotalCount));
 
 	LPCHOMP_NODE CurrentNode = BestNode->Next;
-	int i = (int)Player;
+	int i = Board->Turn;
 	while (CurrentNode)
 	{
 		// Check overflow
-		double BestRating = (BestNode->WinCount)[i] / ((double)BestNode->TotalCount);
-		double CurrentRating = (CurrentNode->WinCount)[i] / ((double)CurrentNode->TotalCount);
+		double CurrentRating = ((double)(CurrentNode->WinCount[Board->Turn])) / (CurrentNode->TotalCount) + sqrt(2 * log(Parent->TotalCount) / (CurrentNode->TotalCount));
 		if (CurrentRating > BestRating)
 		{
 			BestNode = CurrentNode;
+			BestRating = CurrentRating;
 		}
 		CurrentNode = CurrentNode->Next;
 	}
