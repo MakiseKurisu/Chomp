@@ -28,6 +28,7 @@ void FreeBoard(LPCHOMP_BOARD Board);
 LPCHOMP_BOARD CreateNewBoard(int Length, int Width);
 LPCHOMP_BOARD CopyBoard(LPCHOMP_BOARD OldBoard);
 bool MakeMove(LPCHOMP_BOARD Board, int X, int Y);
+bool MakeMoveIndex(LPCHOMP_BOARD Board, int Index);
 bool IndexToCoord(LPCHOMP_BOARD Board, int Index, int* X, int* Y);
 bool CoordToIndex(LPCHOMP_BOARD Board, int* Index, int X, int Y);
 int GetPossibleMoveCount(LPCHOMP_BOARD Board);

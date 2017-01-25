@@ -80,6 +80,16 @@ bool MakeMove(LPCHOMP_BOARD Board, int X, int Y)
 	return true;
 }
 
+bool MakeMoveIndex(LPCHOMP_BOARD Board, int Index)
+{
+	int X, Y;
+	if (!IndexToCoord(Board, Index, &X, &Y))
+	{
+		return false;
+	}
+	return MakeMove(Board, X, Y);
+}
+
 bool IndexToCoord(LPCHOMP_BOARD Board, int Index, int* X, int* Y)
 {
 	if (!Board || !X || !Y || Index <= 0 || Index > Board->PieceCount)
