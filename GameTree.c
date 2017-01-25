@@ -138,14 +138,15 @@ LPCHOMP_NODE BestChildNode(LPCHOMP_NODE Parent, LPCHOMP_BOARD Board)
 	{
 		return NULL;
 	}
-	double BestRating = ((double)(BestNode->WinCount[Board->Turn])) / (BestNode->TotalCount) + sqrt(2 * log(Parent->TotalCount) / (BestNode->TotalCount));
+	//double BestRating = ((double)(BestNode->WinCount[Board->Turn])) / (BestNode->TotalCount) + sqrt(2 * log(Parent->TotalCount) / (BestNode->TotalCount));
+	int BestRating = BestNode->TotalCount;
 
 	LPCHOMP_NODE CurrentNode = BestNode->Next;
 	int i = Board->Turn;
 	while (CurrentNode)
 	{
-		// Check overflow
-		double CurrentRating = ((double)(CurrentNode->WinCount[Board->Turn])) / (CurrentNode->TotalCount) + sqrt(2 * log(Parent->TotalCount) / (CurrentNode->TotalCount));
+		//double CurrentRating = ((double)(CurrentNode->WinCount[Board->Turn])) / (CurrentNode->TotalCount) + sqrt(2 * log(Parent->TotalCount) / (CurrentNode->TotalCount));
+		int CurrentRating = CurrentNode->TotalCount;
 		if (CurrentRating > BestRating)
 		{
 			BestNode = CurrentNode;
